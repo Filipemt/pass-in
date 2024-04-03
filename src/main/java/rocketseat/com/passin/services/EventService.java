@@ -8,7 +8,6 @@ import rocketseat.com.passin.domain.event.exceptions.EventNotFoundException;
 import rocketseat.com.passin.dto.event.EventIdDTO;
 import rocketseat.com.passin.dto.event.EventRequestDTO;
 import rocketseat.com.passin.dto.event.EventResponseDTO;
-import rocketseat.com.passin.repositories.AttendeeRepository;
 import rocketseat.com.passin.repositories.EventRepositoriy;
 
 import java.text.Normalizer;
@@ -19,11 +18,11 @@ import java.util.List;
 public class EventService {
 
     private final EventRepositoriy eventRepositoriy;
-    private final AttendeeRepository attendeeRepository;
+    private final AttendeeService attendeeService;
 
     public EventResponseDTO getEventDetail(String eventId) {
         Event event = this.eventRepositoriy.findById(eventId).orElseThrow(() -> new EventNotFoundException("Event not found with ID:" + eventId));
-        List<Attendee> atteendList = this.attendeeRepository.findByEventId(eventId);
+        List<Attendee> atteendList = this.attendeeService.getAllAttendeesFromEvent(eventId);
         return new EventResponseDTO(event, atteendList.size());
     }
     public EventIdDTO createEvent(EventRequestDTO eventDTO) {
