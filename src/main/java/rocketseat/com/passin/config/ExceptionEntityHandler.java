@@ -1,11 +1,15 @@
 package rocketseat.com.passin.config;
 
-import org.apache.coyote.Response;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import rocketseat.com.passin.domain.event.Event;
+import rocketseat.com.passin.domain.attendee.exceptions.AttendeeAlreadyExistsException;
+import rocketseat.com.passin.domain.attendee.exceptions.AttendeeNotFoundException;
+import rocketseat.com.passin.domain.checkin.exceptions.CheckInAlreadyExistsException;
+import rocketseat.com.passin.domain.event.exceptions.EventFullException;
 import rocketseat.com.passin.domain.event.exceptions.EventNotFoundException;
+import rocketseat.com.passin.dto.general.ErrorResponseDTO;
 
 @ControllerAdvice
 public class ExceptionEntityHandler {
@@ -13,4 +17,24 @@ public class ExceptionEntityHandler {
     public ResponseEntity handleEventNotFound(EventNotFoundException e) {
         return ResponseEntity.notFound().build();
     }
+    @ExceptionHandler(EventFullException.class)
+    public ResponseEntity<ErrorResponseDTO> handleEventFull(EventFullException e) {
+        return ResponseEntity.badRequest().body(new ErrorResponseDTO(e.getMessage()));
+    }
+
+    @ExceptionHandler(AttendeeNotFoundException.class)
+    public ResponseEntity handleAttendeeNotFound(AttendeeNotFoundException e) {
+        return ResponseEntity.notFound().build();
+    }
+
+    @ExceptionHandler(AttendeeAlreadyExistsException.class)
+    public ResponseEntity handleAttendeeAlreadyExists(AttendeeAlreadyExistsException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).build();
+    }
+
+    @ExceptionHandler(CheckInAlreadyExistsException.class)
+    public ResponseEntity handleCheckInAlreadyExists(CheckInAlreadyExistsException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).build();
+    }
+
 }

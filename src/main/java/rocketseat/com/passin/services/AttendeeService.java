@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 import rocketseat.com.passin.domain.attendee.Attendee;
-import rocketseat.com.passin.domain.attendee.exceptions.AttendeeAlreadyExistsExcetion;
+import rocketseat.com.passin.domain.attendee.exceptions.AttendeeAlreadyExistsException;
 import rocketseat.com.passin.domain.attendee.exceptions.AttendeeNotFoundException;
 import rocketseat.com.passin.domain.checkin.CheckIn;
 import rocketseat.com.passin.dto.attendee.AttendeeBadgeResponseDTO;
@@ -12,7 +12,6 @@ import rocketseat.com.passin.dto.attendee.AttendeeDetails;
 import rocketseat.com.passin.dto.attendee.AttendeesListResponseDTO;
 import rocketseat.com.passin.dto.attendee.AttendeeBadgeDTO;
 import rocketseat.com.passin.repositories.AttendeeRepository;
-import rocketseat.com.passin.repositories.CheckinRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -43,7 +42,7 @@ public class AttendeeService {
 
     public void verifyAttendeeSubscription(String email, String eventId) {
         Optional<Attendee> isAttendeeRegistered = this.attendeeRepository.findByEventIdAndEmail(eventId, email);
-        if (isAttendeeRegistered.isPresent()) throw new AttendeeAlreadyExistsExcetion("Attendee is alredy register!");
+        if (isAttendeeRegistered.isPresent()) throw new AttendeeAlreadyExistsException("Attendee is alredy register!");
     }
 
     public Attendee registerAttendee(Attendee newAttendee) {
